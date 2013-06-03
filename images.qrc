@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/">
+        <file>user.png</file>
+        <file>linux2.png</file>
+        <file>user_offline.png</file>
+        <file>greensmilie_set/icon_alien.gif</file>
+        <file>greensmilie_set/icon_biggrin.gif</file>
+        <file>greensmilie_set/icon_blush.gif</file>
+        <file>greensmilie_set/icon_censored_GREEN.gif</file>
+        <file>greensmilie_set/icon_confused.gif</file>
+        <file>greensmilie_set/icon_cool.gif</file>
+        <file>greensmilie_set/icon_cuinlove.gif</file>
+        <file>greensmilie_set/icon_down.gif</file>
+        <file>greensmilie_set/icon_eek.gif</file>
+        <file>greensmilie_set/icon_erschreckt.gif</file>
+        <file>greensmilie_set/icon_fies.gif</file>
+        <file>greensmilie_set/icon_frown.gif</file>
+        <file>greensmilie_set/icon_igitt.gif</file>
+        <file>greensmilie_set/icon_irre.gif</file>
+        <file>greensmilie_set/icon_lol.gif</file>
+        <file>greensmilie_set/icon_mad_GREEN.gif</file>
+        <file>greensmilie_set/icon_neutral.gif</file>
+        <file>greensmilie_set/icon_nosmile.gif</file>
+        <file>greensmilie_set/icon_razz.gif</file>
+        <file>greensmilie_set/icon_rolleyes.gif</file>
+        <file>greensmilie_set/icon_shocked.gif</file>
+        <file>greensmilie_set/icon_skeptisch.gif</file>
+        <file>greensmilie_set/icon_slash.gif</file>
+        <file>greensmilie_set/icon_smile.gif</file>
+        <file>greensmilie_set/icon_stumm.gif</file>
+        <file>greensmilie_set/icon_thumbs1.gif</file>
+        <file>greensmilie_set/icon_ugly.gif</file>
+        <file>greensmilie_set/icon_wink.gif</file>
+        <file>internet-chat-2.png</file>
+        <file>internet-chat-3.png</file>
+        <file>internet-group-chat.png</file>
+        <file>pony.wav</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,13 @@
+INPUT(
+./release\MainWindow.o
+./release\main.o
+./release\dialog.o
+./release\registration.o
+./release\protocol.o
+./release\settingsdialog.o
+./release\qrc_images.o
+./release\moc_MainWindow.o
+./release\moc_dialog.o
+./release\moc_registration.o
+./release\moc_settingsdialog.o
+);

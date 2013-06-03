@@ -1,0 +1,13 @@
+INPUT(
+./debug\MainWindow.o
+./debug\main.o
+./debug\dialog.o
+./debug\registration.o
+./debug\protocol.o
+./debug\settingsdialog.o
+./debug\qrc_images.o
+./debug\moc_MainWindow.o
+./debug\moc_dialog.o
+./debug\moc_registration.o
+./debug\moc_settingsdialog.o
+);
