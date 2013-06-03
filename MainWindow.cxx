@@ -164,7 +164,7 @@ void MainWindow::readyRead()
     {
 
         QDataStream in(socket);
-        int errorID;
+
         int messageID;
         QString temp;
 
@@ -173,6 +173,7 @@ void MainWindow::readyRead()
 
         if(messageID == 0)
         {
+            int errorID;
             in >> errorID;
 
             qDebug() << "Errornumber: " << errorID;
@@ -192,7 +193,6 @@ void MainWindow::readyRead()
                 msgBox.setIcon(QMessageBox::Information);
                 msgBox.exec();
             }
-
         }
         else if(messageID == 2)
         {
@@ -480,10 +480,8 @@ void MainWindow::readyRead()
                             chat->writeInTextfield(message);
                             cw->raise();
                         }
-
                     }
                 }
-
             }
         }
 
@@ -788,7 +786,7 @@ void MainWindow::logout_triggered()
     statusBarMain->showMessage("Logout");
     QDataStream out(socket);
 
-    out << (int) 7;
+    out << (int) 2;
     out << (int) 3;
     out << email;
     out << "\n";
@@ -877,6 +875,17 @@ void MainWindow::on_actionDelete_Room_triggered()
 void MainWindow::on_actionQuit_triggered()
 {
     qDebug() << "Programm cloesd";
+
+    qDebug() << "Logout";
+    statusBarMain->showMessage("Logout");
+    QDataStream out(socket);
+
+    out << (int) 2;
+    out << (int) 3;
+    out << email;
+    out << "\n";
+    socket->close();
+
     this->close();
 }
 
