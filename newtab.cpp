@@ -54,6 +54,8 @@ void newTab::writeMessage()
         QString localtext = QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") + "@" + s.value("Username").toString() + ": " + text ;
         ui->textEdit->append(localtext);
 
+        // Now we should log the Data
+
        /* int lines = ui->textEdit->document()->lineCount();
         qDebug() << lines;
         if(lines == 3 || lines == 6)

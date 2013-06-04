@@ -14,19 +14,35 @@ Dialog::Dialog(QWidget *parent) :
 
 
 void Dialog::openDialog()
-{    
-    if(openFileDialog.exec())
-    {
-        fileList = openFileDialog.selectedFiles();
-        qDebug() << fileList.first();
-        datei->setText(fileList.first());
+{
+    QString filePath = QFileDialog::getOpenFileName(this,tr("Open File"), "/home");
 
-        QFile file(fileList.first());
+    datei->setText(filePath);
+
+    QFile file(filePath);
+    qDebug() <<file.fileName();
+    file.open(QIODevice::ReadOnly);
+    //QDataStream in(&file);//binaryfile += file.readLine();
+    //in >> binaryfile;
+    binaryfile = file.readAll();
+    file.close();
+
+    qDebug() << binaryfile.size();
+
+
+    /*if(openFileDialog.exec())
+    {
+        QString filePath = openFileDialog.getOpenFileName(this,"Choose File","/home");
+
+        datei->setText(filePath);
+
+        QFile file(filePath);
+        qDebug() <<file.fileName();
         file.open(QIODevice::ReadOnly);
         QDataStream in(&file);//binaryfile += file.readLine();
         in >> binaryfile;
         file.close();
 
         qDebug() << binaryfile.size();
-    }
+    }*/
 }

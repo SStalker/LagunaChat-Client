@@ -37,8 +37,8 @@ FORMS   += MainWindow.ui \
     chatwidget.ui \
     dialogadduser.ui \
     newuserauthdialog.ui \
+    newdataauthdialog.ui \
     dialogdeletefriendship.ui \
-    chatwidget2.ui \
     newtab.ui
 
 HEADERS += MainWindow.h \        
@@ -49,8 +49,8 @@ HEADERS += MainWindow.h \
     chatwidget.h \
     dialogadduser.h \
     newuserauthdialog.h \
+    newdataauthdialog.h \
     dialogdeletefriendship.h \
-    chatwidget2.h \
     newtab.h
 
 SOURCES += MainWindow.cxx \
@@ -62,7 +62,7 @@ SOURCES += MainWindow.cxx \
     chatwidget.cpp \
     dialogadduser.cpp \
     newuserauthdialog.cpp \
+    newdataauthdialog.cpp \
     dialogdeletefriendship.cpp \
-    chatwidget2.cpp \
     newtab.cpp
 

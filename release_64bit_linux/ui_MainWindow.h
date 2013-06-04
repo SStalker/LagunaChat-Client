@@ -43,6 +43,7 @@ public:
     QAction *actionDelete_User;
     QAction *actionCreate_Room;
     QAction *actionDelete_Room;
+    QAction *actionSend_Data;
     QWidget *centralwidget;
     QGridLayout *gridLayout_4;
     QFrame *mainFrame;
@@ -129,6 +130,9 @@ public:
         actionDelete_Room->setObjectName(QStringLiteral("actionDelete_Room"));
         actionDelete_Room->setEnabled(false);
         actionDelete_Room->setVisible(false);
+        actionSend_Data = new QAction(MainWindow);
+        actionSend_Data->setObjectName(QStringLiteral("actionSend_Data"));
+        actionSend_Data->setVisible(false);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         gridLayout_4 = new QGridLayout(centralwidget);
@@ -261,7 +265,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 800, 23));
+        menuBar->setGeometry(QRect(0, 0, 800, 19));
         menuProgram = new QMenu(menuBar);
         menuProgram->setObjectName(QStringLiteral("menuProgram"));
         menuExtras = new QMenu(menuBar);
@@ -289,13 +293,15 @@ public:
         menuUser->addSeparator();
         menuUser->addAction(actionCreate_Room);
         menuUser->addAction(actionDelete_Room);
+        menuUser->addSeparator();
+        menuUser->addAction(actionSend_Data);
 
         retranslateUi(MainWindow);
         QObject::connect(sayLineEdit, SIGNAL(returnPressed()), sayButton, SLOT(animateClick()));
         QObject::connect(LineEditEmail, SIGNAL(returnPressed()), LineEditPassword, SLOT(setFocus()));
         QObject::connect(LineEditPassword, SIGNAL(returnPressed()), loginButton, SLOT(animateClick()));
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -313,6 +319,7 @@ public:
         actionDelete_User->setText(QApplication::translate("MainWindow", "Delete User", 0));
         actionCreate_Room->setText(QApplication::translate("MainWindow", "Create Room", 0));
         actionDelete_Room->setText(QApplication::translate("MainWindow", "Delete Room", 0));
+        actionSend_Data->setText(QApplication::translate("MainWindow", "Send Data", 0));
         sayButton->setText(QApplication::translate("MainWindow", "Say", 0));
         titleLabel->setText(QApplication::translate("MainWindow", "Chatclient by Raphael Grewe", 0));
         charLabel->setText(QString());

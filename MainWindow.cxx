@@ -5,8 +5,8 @@
 #include "settingsdialog.h"
 #include "dialogadduser.h"
 #include "newuserauthdialog.h"
+#include "newdataauthdialog.h"
 #include "dialogdeletefriendship.h"
-#include "chatwidget2.h"
 #include "chatwidget.h"
 #include "newtab.h"
 
@@ -193,6 +193,14 @@ void MainWindow::readyRead()
                 msgBox.setIcon(QMessageBox::Information);
                 msgBox.exec();
             }
+            else if(errorID == 2)
+            {
+                QMessageBox msgBox;
+                msgBox.setText("Send File to User failed!\nThe user is offline");
+                msgBox.setWindowTitle("Infomation");
+                msgBox.setIcon(QMessageBox::Information);
+                msgBox.exec();
+            }
         }
         else if(messageID == 2)
         {
@@ -350,6 +358,50 @@ void MainWindow::readyRead()
                 out << this->email;
                 out << "\n";
             }
+            else if(reQuestID == 10)
+            {
+                QString fromEmail;
+                QString fromUser;
+                QString filename;
+
+                in >> fromEmail;
+                in >> fromUser;
+                in >> filename;
+
+                newDataAuthDialog *newFile = new newDataAuthDialog(this);
+                newFile->setEmailText(fromEmail);
+                newFile->setUsernametext(fromUser);
+                newFile->setFileText(filename);
+
+                newFile->show();
+                newFile->exec();
+
+
+                if(newFile->result())
+                {
+                    //send message to server that the user accepts the other user to his list
+                    qDebug() << "Client akzeptiert Datei";
+                    /*QDataStream out(socket);
+                    out << (int) 5;
+                    out << (int) 5;
+                    out << email;
+                    out << QString(i.key());
+                    out << (int) 1;
+                    out << "\n";*/
+                }
+                else
+                {
+                    //send message to server that the user dont accept the other user
+                    qDebug() << "Client lehnt Datei ab";
+                    /*QDataStream out(socket);
+                    out << (int) 5;
+                    out << (int) 5;
+                    out << email;
+                    out << QString(i.key());
+                    out << (int) 0;
+                    out << "\n";*/
+                }
+            }
 
         }
         else if(messageID == 6)
@@ -358,13 +410,7 @@ void MainWindow::readyRead()
             qDebug() << "get the Userlist after login";
             QMap<QString, bool> userlist;
             in >> userlist;
-
             userListWidget->clear();
-
-            /*foreach(QString user, userlist)
-            {
-                new QListWidgetItem(QPixmap(":/user.png"), user, userListWidget);
-            }*/
 
             QMapIterator<QString, bool> i(userlist);
 
@@ -416,8 +462,6 @@ void MainWindow::readyRead()
                 QString _friend;
                 in >> _friend;
 
-                //userListWidget->removeItemWidget(getUserInList(_friend));
-                //new QListWidgetItem(QPixmap(":/user_offline.png"), _friend, userListWidget);
                 getUserInList(_friend)->setIcon(QPixmap(":/user_offline.png"));
                 statusBarMain->showMessage(_friend + " hat sich ausgeloggt");
 
@@ -579,6 +623,7 @@ void MainWindow::connected()
     actionDelete_User->setVisible(true);
     actionCreate_Room->setVisible(true);
     actionDelete_Room->setVisible(true);
+    actionSend_Data->setVisible(true);
 
     actionLogin->setEnabled(true);
     actionRegistration->setEnabled(true);
@@ -586,6 +631,7 @@ void MainWindow::connected()
     actionDelete_User->setEnabled(true);
     actionCreate_Room->setEnabled(true);
     actionDelete_Room->setEnabled(true);
+    actionSend_Data->setVisible(true);
 
     loginButton->setEnabled(true);
 }
@@ -618,26 +664,7 @@ void MainWindow::setCountValue(QString newValue)
 
 void MainWindow::data_send()
 {
-    Dialog *filesend = new Dialog();
-    qDebug() << userListWidget->count();
-    for(int i = 0; i < userListWidget->count(); i++)
-    {
-        QString itemData = userListWidget->item(i)->text();
-        filesend->listWidget->addItem(itemData);
-    }
-    filesend->show();
-    if(filesend->exec())
-    {
-        QString toUser = filesend->listWidget->item(filesend->listWidget->currentRow())->text();//user@host
-        socket->write(QString("/dataTo:" + toUser + "\n").toUtf8());
-        qint64 anzahl = socket->write(filesend->binaryfile);
-        qDebug() << anzahl;
 
-
-
-    }
-
-    delete filesend;
 }
 
 void MainWindow::on_actionRegistration_triggered()
@@ -913,4 +940,38 @@ QListWidgetItem* MainWindow::getUserInList(QString user)
     }
 
     return 0;
+}
+
+void MainWindow::on_actionSend_Data_triggered()
+{
+    Dialog *filesend = new Dialog();
+    qDebug() << userListWidget->count();
+    for(int i = 0; i < userListWidget->count(); i++)
+    {
+        QString itemData = userListWidget->item(i)->text();
+        filesend->listWidget->addItem(itemData);
+    }
+    filesend->show();
+    if(filesend->exec())
+    {
+        // so first we need the choosed user if online or not
+        QString toUser = filesend->listWidget->item(filesend->listWidget->currentRow())->text();//user@host
+        QString fileName = filesend->datei->text();
+        QDataStream out(socket);
+
+        out << (int) 6;
+        out << toUser;
+        out << this->email;
+        out << fileName;
+        out << "\n";
+
+        //socket->write(QString("/dataTo:" + toUser + "\n").toUtf8());
+        //qint64 anzahl = socket->write(filesend->binaryfile);
+        //qDebug() << anzahl;
+
+
+
+    }
+
+    delete filesend;
 }

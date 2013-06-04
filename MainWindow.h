@@ -79,6 +79,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
         void on_actionDelete_Room_triggered();
 
+        void on_actionSend_Data_triggered();
+
 signals:
         // Count the typping chars
         void countValueChar(QString);

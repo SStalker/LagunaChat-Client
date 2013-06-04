@@ -55,7 +55,7 @@ border-radius: 25px;
         <number>1</number>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="chatPage">
         <layout class="QGridLayout" name="gridLayout">
@@ -276,7 +276,7 @@ border-radius: 25px;
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProgram">
@@ -304,6 +304,8 @@ border-radius: 25px;
     <addaction name="separator"/>
     <addaction name="actionCreate_Room"/>
     <addaction name="actionDelete_Room"/>
+    <addaction name="separator"/>
+    <addaction name="actionSend_Data"/>
    </widget>
    <addaction name="menuProgram"/>
    <addaction name="menuUser"/>
@@ -386,6 +388,14 @@ border-radius: 25px;
    </property>
    <property name="text">
     <string>Delete Room</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionSend_Data">
+   <property name="text">
+    <string>Send Data</string>
    </property>
    <property name="visible">
     <bool>false</bool>

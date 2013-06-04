@@ -49,7 +49,7 @@ public:
         datei = new QLabel(Dialog);
         datei->setObjectName(QStringLiteral("datei"));
         datei->setGeometry(QRect(150, 70, 221, 71));
-        datei->setWordWrap(false);
+        datei->setWordWrap(true);
         datei->setOpenExternalLinks(true);
 
         retranslateUi(Dialog);
