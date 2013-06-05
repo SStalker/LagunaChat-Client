@@ -51,7 +51,9 @@ HEADERS += MainWindow.h \
     newuserauthdialog.h \
     newdataauthdialog.h \
     dialogdeletefriendship.h \
-    newtab.h
+    newtab.h \
+    filetransfersender.h \
+    filetransferreceiver.h
 
 SOURCES += MainWindow.cxx \
            main.cpp \
@@ -64,5 +66,7 @@ SOURCES += MainWindow.cxx \
     newuserauthdialog.cpp \
     newdataauthdialog.cpp \
     dialogdeletefriendship.cpp \
-    newtab.cpp
+    newtab.cpp \
+    filetransfersender.cpp \
+    filetransferreceiver.cpp
 

@@ -8,6 +8,8 @@
 // GUI we built in Designer  
 #include "ui_MainWindow.h"
 #include "chatwidget.h"
+#include "filetransfersender.h"
+#include "filetransferreceiver.h"
 
 /*
  * This is the MainWindow class that we have told to inherit from
@@ -25,6 +27,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
         QSettings *settings;
 
         ChatWidget *cw;
+        FileTransferSender *fileSender;
+        FileTransferReceiver *fileReceiver;
 
         bool checkUserInList(QString user);
         QListWidgetItem* getUserInList(QString user);

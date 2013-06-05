@@ -9,6 +9,7 @@
 #include "dialogdeletefriendship.h"
 #include "chatwidget.h"
 #include "newtab.h"
+#include "filetransfersender.h"
 
 
 #include <QRegExp>
@@ -364,6 +365,8 @@ void MainWindow::readyRead()
                     qDebug() << "User(" << ipFromUser << "==" << emailFromChoosedUser << ") accepted. So we can open the Connection";
 
                     // setup server and socket for file transfer
+                    fileSender = new FileTransferSender(this);
+                    fileSender->listen(QHostAddress(ipFromUser),4242);
                 }
                 else
                 {
@@ -417,9 +420,12 @@ void MainWindow::readyRead()
                     out << "\n";
 
                     // now setup the tcpsocket and listen to the port 4242
-                    QTcpSocket *fileSocketReciever = new QTcpSocket(this);
+                    //QTcpSocket *fileSocketReciever = new QTcpSocket(this);
 
-                    fileSocketReciever->connectToHost();
+                    //fileSocketReciever->connectToHost();
+
+                    // IMPORTANT NEED IP FROM SENDER
+                    // fileReceiver->connectToHost();
                 }
                 else
                 {
