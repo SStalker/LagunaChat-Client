@@ -348,6 +348,33 @@ void MainWindow::readyRead()
                 in >> user;
                 new QListWidgetItem(QPixmap(":/user.png"), user, userListWidget);
             }
+            else if(reQuestID == 7)
+            {
+                int ok = 0;
+                QString emailFromChoosedUser;
+
+                in >> ok;
+                in >> emailFromChoosedUser;
+
+                if(ok == 1)
+                {
+                    QString ipFromUser;
+                    in >> ipFromUser;
+
+                    qDebug() << "User(" << ipFromUser << "==" << emailFromChoosedUser << ") accepted. So we can open the Connection";
+
+                    // setup server and socket for file transfer
+                }
+                else
+                {
+                    qDebug() << "User dont wats your fucking file!! ";
+                    QMessageBox msgBox;
+                    msgBox.setText("User dont wats your fucking file!!");
+                    msgBox.setWindowTitle("Infomation");
+                    msgBox.setIcon(QMessageBox::Information);
+                    msgBox.exec();
+                }
+            }
             else if(reQuestID == 9)
             {
                 // Request to get offline messages
@@ -381,25 +408,25 @@ void MainWindow::readyRead()
                 {
                     //send message to server that the user accepts the other user to his list
                     qDebug() << "Client akzeptiert Datei";
-                    /*QDataStream out(socket);
+                    QDataStream out(socket);
                     out << (int) 5;
-                    out << (int) 5;
-                    out << email;
-                    out << QString(i.key());
+                    out << (int) 6;
+                    out << this->email; // Email from User who get the File Question
+                    out << fromEmail; // Email from User who send the File Question
                     out << (int) 1;
-                    out << "\n";*/
+                    out << "\n";
                 }
                 else
                 {
                     //send message to server that the user dont accept the other user
                     qDebug() << "Client lehnt Datei ab";
-                    /*QDataStream out(socket);
+                    QDataStream out(socket);
                     out << (int) 5;
-                    out << (int) 5;
-                    out << email;
-                    out << QString(i.key());
+                    out << (int) 6;
+                    out << this->email; // Email from User who get the File Question
+                    out << fromEmail; // Email from User who send the File Question
                     out << (int) 0;
-                    out << "\n";*/
+                    out << "\n";
                 }
             }
 
