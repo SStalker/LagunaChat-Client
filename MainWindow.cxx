@@ -415,6 +415,11 @@ void MainWindow::readyRead()
                     out << fromEmail; // Email from User who send the File Question
                     out << (int) 1;
                     out << "\n";
+
+                    // now setup the tcpsocket and listen to the port 4242
+                    QTcpSocket *fileSocketReciever = new QTcpSocket(this);
+
+                    fileSocketReciever->connectToHost();
                 }
                 else
                 {
