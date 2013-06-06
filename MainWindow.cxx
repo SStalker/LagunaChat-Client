@@ -87,6 +87,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     in.setDevice(socket);
     out.setDevice(socket);
+
 }
 
 // This gets called when the loginButton gets clicked:
@@ -366,7 +367,7 @@ void MainWindow::readyRead()
 
                     // setup server and socket for file transfer
                     fileSender = new FileTransferSender(this);
-                    fileSender->listen(QHostAddress(ipFromUser),4242);
+                    fileSender->listen(QHostAddress::Any,4242);
 
                     qDebug() << "Is sender listening? " << fileSender->isListening();
                 }
