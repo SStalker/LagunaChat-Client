@@ -5,6 +5,7 @@
 FileTransferSender::FileTransferSender(QObject *parent) : QTcpServer(parent)
 {
     qDebug() << "Sender was started";
+    connect(this,SIGNAL(acceptError(QAbstractSocket::SocketError)),this,SLOT(acceptError(QAbstractSocket::SocketError)));
 }
 
 void FileTransferSender::incomingConnection(qintptr socketfd)
@@ -26,4 +27,9 @@ void FileTransferSender::disconnected()
 void FileTransferSender::readyRead()
 {
     qDebug() << "There a bytes to read yay";
+}
+
+void FileTransferSender::acceptError(QAbstractSocket::SocketError socketError)
+{
+    qDebug() << "Error (SENDER) " << socketError;
 }

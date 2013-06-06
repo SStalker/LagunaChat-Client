@@ -15,6 +15,7 @@ public:
 private slots:
     void readyRead();
     void disconnected();
+    void acceptError(QAbstractSocket::SocketError socketError);
 
 protected:
     void incomingConnection(qintptr socketfd);
