@@ -365,11 +365,15 @@ void MainWindow::readyRead()
 
                     qDebug() << "User(" << ipFromUser << "==" << emailFromChoosedUser << ") accepted. So we can open the Connection";
 
-                    // setup server and socket for file transfer
-                    fileSender = new FileTransferSender(this);
-                    fileSender->listen(QHostAddress::Any,4242);
 
-                    qDebug() << "Is sender listening? " << fileSender->isListening();
+                    // send an info that the server is now listening
+
+                    QDataStream out(socket);
+                    out << (int) 7;
+                    out << this->email;
+                    out << emailFromChoosedUser;
+                    out << "\n";
+
                 }
                 else
                 {
@@ -380,6 +384,15 @@ void MainWindow::readyRead()
                     msgBox.setIcon(QMessageBox::Information);
                     msgBox.exec();
                 }
+            }
+            else if(reQuestID == 8)
+            {
+                // setup server and socket for file transfer
+                fileSender = new FileTransferSender(this);
+                fileSender->listen(QHostAddress::Any,4242);
+
+                qDebug() << "Is sender listening? " << fileSender->isListening();
+
             }
             else if(reQuestID == 9)
             {
@@ -415,7 +428,7 @@ void MainWindow::readyRead()
                 if(newFile->result())
                 {
                     //send message to server that the user accepts the other user to his list
-                    qDebug() << "Client akzeptiert Datei";
+                    qDebug() << "Client akzeptiert Datei von: " << fromUserIp;
                     QDataStream out(socket);
                     out << (int) 5;
                     out << (int) 6;
@@ -934,7 +947,6 @@ void MainWindow::on_actionDelete_User_triggered()
 
 void MainWindow::on_actionCreate_Room_triggered()
 {
-    fileReceiver->connectToHost(QHostAddress("192.168.2.6"),4242);
 
 }
 
