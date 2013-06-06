@@ -367,6 +367,8 @@ void MainWindow::readyRead()
                     // setup server and socket for file transfer
                     fileSender = new FileTransferSender(this);
                     fileSender->listen(QHostAddress(ipFromUser),4242);
+
+                    qDebug() << "Is sender listening? " << fileSender->isListening();
                 }
                 else
                 {
@@ -422,9 +424,9 @@ void MainWindow::readyRead()
                     out << "\n";
 
                     // now setup the tcpsocket and listen to the port 4242
-                    QTcpSocket *fileSocketReciever = new QTcpSocket(this);
+                    fileReceiver = new FileTransferReceiver(this);
 
-                    fileSocketReciever->connectToHost(QHostAddress(fromUserIp),4242);
+                    fileReceiver->connectToHost(QHostAddress(fromUserIp),4242);
 
                     // IMPORTANT NEED IP FROM SENDER
                     // fileReceiver->connectToHost();

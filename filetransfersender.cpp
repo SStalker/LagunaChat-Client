@@ -4,7 +4,7 @@
 
 FileTransferSender::FileTransferSender(QObject *parent) : QTcpServer(parent)
 {
-
+    qDebug() << "Sender was started";
 }
 
 void FileTransferSender::incomingConnection(qintptr socketfd)
