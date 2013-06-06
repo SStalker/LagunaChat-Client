@@ -391,10 +391,12 @@ void MainWindow::readyRead()
             else if(reQuestID == 10)
             {
                 QString fromEmail;
+                QString fromUserIp;
                 QString fromUser;
                 QString filename;
 
                 in >> fromEmail;
+                in >> fromUserIp;
                 in >> fromUser;
                 in >> filename;
 
@@ -420,9 +422,9 @@ void MainWindow::readyRead()
                     out << "\n";
 
                     // now setup the tcpsocket and listen to the port 4242
-                    //QTcpSocket *fileSocketReciever = new QTcpSocket(this);
+                    QTcpSocket *fileSocketReciever = new QTcpSocket(this);
 
-                    //fileSocketReciever->connectToHost();
+                    fileSocketReciever->connectToHost(QHostAddress(fromUserIp),4242);
 
                     // IMPORTANT NEED IP FROM SENDER
                     // fileReceiver->connectToHost();
