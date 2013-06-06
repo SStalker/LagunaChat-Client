@@ -6,6 +6,7 @@
 FileTransferReceiver::FileTransferReceiver(QObject *parent) :
     QTcpSocket(parent)
 {
+    qDebug() << "Receiver was started";
     connect(this,SIGNAL(readyRead()),this,SLOT(readyRead()));
     connect(this,SIGNAL(connected()),this,SLOT(connected()));
     connect(this,SIGNAL(hostFound()),this,SLOT(hostFound()));

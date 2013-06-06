@@ -933,6 +933,7 @@ void MainWindow::on_actionDelete_User_triggered()
 
 void MainWindow::on_actionCreate_Room_triggered()
 {
+    fileReceiver->connectToHost(QHostAddress("192.168.2.6"),4242);
 
 }
 
