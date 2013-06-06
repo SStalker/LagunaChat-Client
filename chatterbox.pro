@@ -53,7 +53,10 @@ HEADERS += MainWindow.h \
     dialogdeletefriendship.h \
     newtab.h \
     filetransfersender.h \
-    filetransferreceiver.h
+    filetransferreceiver.h \
+    request.h \
+    error.h \
+    state.h
 
 SOURCES += MainWindow.cxx \
            main.cpp \
@@ -68,5 +71,8 @@ SOURCES += MainWindow.cxx \
     dialogdeletefriendship.cpp \
     newtab.cpp \
     filetransfersender.cpp \
-    filetransferreceiver.cpp
+    filetransferreceiver.cpp \
+    request.cpp \
+    error.cpp \
+    state.cpp
 

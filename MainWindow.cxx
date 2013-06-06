@@ -11,6 +11,8 @@
 #include "newtab.h"
 #include "filetransfersender.h"
 
+// Own classes to minify my sourcecode and make it more readable
+#include "error.h"
 
 #include <QRegExp>
 #include <QMessageBox>
@@ -88,6 +90,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     in.setDevice(socket);
     out.setDevice(socket);
 
+    error = new Error();
+    state = new State();
 }
 
 // This gets called when the loginButton gets clicked:
@@ -179,29 +183,12 @@ void MainWindow::readyRead()
             in >> errorID;
 
             qDebug() << "Errornumber: " << errorID;
-            if(errorID == 0)
+
+            switch(errorID)
             {
-                QMessageBox msgBox;
-                msgBox.setText("Registration failed!\nThe email is already used");
-                msgBox.setWindowTitle("Infomation");
-                msgBox.setIcon(QMessageBox::Information);
-                msgBox.exec();
-            }
-            else if(errorID == 1)
-            {
-                QMessageBox msgBox;
-                msgBox.setText("Login failed!\nThe username and/or password is wrong");
-                msgBox.setWindowTitle("Infomation");
-                msgBox.setIcon(QMessageBox::Information);
-                msgBox.exec();
-            }
-            else if(errorID == 2)
-            {
-                QMessageBox msgBox;
-                msgBox.setText("Send File to User failed!\nThe user is offline");
-                msgBox.setWindowTitle("Infomation");
-                msgBox.setIcon(QMessageBox::Information);
-                msgBox.exec();
+                case 0: error->registrationFailed(); break;
+                case 1: error->loginFailed(); break;
+                case 2: error->sendFileFailedOffline(); break;
             }
         }
         else if(messageID == 2)
@@ -209,29 +196,14 @@ void MainWindow::readyRead()
             int stateID;
             in >> stateID;
             //in >> temp;
+
             qDebug() << "Current status: " << stateID;
+            state->setDataStream(in);
+            state->setSocket(socket);
 
             if(stateID == 1)
             {
-                // Flip over to the chat page:
-                stackedWidget->setCurrentWidget(chatPage);
-                actionLogin->setText("Logout");
-                connect(actionLogin,SIGNAL(triggered()),this,SLOT(logout_triggered()));
-
-                sayLineEdit->setFocus();
-                QString name;
-                in >> name;
-                QSettings s;
-                s.setValue("Username",name);
-                //sende anfrage nach der userliste
-                QDataStream out(socket);
-                //QString regi(" + reg->getUsername() + ":" + reg->getPassword() + "\n");
-                //int sizeOfText = regi.size();
-
-                out << (int) 5;
-                out << (int) 1;
-                out << email;
-                out << "\n";
+                state->stateLogin(this);
             }
             else if(stateID == 2)
             {

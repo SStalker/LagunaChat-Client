@@ -11,6 +11,9 @@
 #include "filetransfersender.h"
 #include "filetransferreceiver.h"
 
+#include "error.h"
+#include "state.h"
+
 /*
  * This is the MainWindow class that we have told to inherit from
  * our Designer MainWindow (ui::MainWindow)
@@ -32,6 +35,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
         bool checkUserInList(QString user);
         QListWidgetItem* getUserInList(QString user);
+
+        Error *error;
+        State *state;
 
     private slots:
 
