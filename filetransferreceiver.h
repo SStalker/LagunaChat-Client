@@ -15,6 +15,7 @@ public slots:
     void readyRead();
     void connected();
     void hostFound();
+    void disconnect();
     void error(QAbstractSocket::SocketError);
 
 protected:
