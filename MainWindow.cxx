@@ -429,13 +429,7 @@ void MainWindow::readyRead()
                     out << (int) 1;
                     out << "\n";
 
-                    // now setup the tcpsocket and listen to the port 4242
-                    fileReceiver = new FileTransferReceiver(this);
 
-                    fileReceiver->connectToHost(QHostAddress(fromUserIp),4242);
-
-                    // IMPORTANT NEED IP FROM SENDER
-                    // fileReceiver->connectToHost();
                 }
                 else
                 {
@@ -449,6 +443,19 @@ void MainWindow::readyRead()
                     out << (int) 0;
                     out << "\n";
                 }
+            }
+            else if(reQuestID == 11)
+            {
+                QString senderIP;
+                in >> senderIP;
+
+                // now setup the tcpsocket and listen to the port 4242
+                fileReceiver = new FileTransferReceiver(this);
+
+                fileReceiver->connectToHost(QHostAddress(senderIP),4242);
+
+                // IMPORTANT NEED IP FROM SENDER
+                // fileReceiver->connectToHost();
             }
 
         }
