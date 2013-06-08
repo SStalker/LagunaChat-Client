@@ -91,7 +91,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     out.setDevice(socket);
 
     error = new Error();
-    state = new State();
+    //state = new State();
 }
 
 // This gets called when the loginButton gets clicked:
@@ -198,12 +198,30 @@ void MainWindow::readyRead()
             //in >> temp;
 
             qDebug() << "Current status: " << stateID;
-            state->setDataStream(in);
-            state->setSocket(socket);
+
 
             if(stateID == 1)
             {
-                state->stateLogin(this);
+                // Flip over to the chat page:
+                stackedWidget->setCurrentWidget(chatPage);
+                actionLogin->setText("Logout");
+                connect(actionLogin,SIGNAL(triggered()),this,SLOT(logout_triggered()));
+
+                sayLineEdit->setFocus();
+
+                QString name;
+                in >> name;
+                QSettings s;
+                s.setValue("Username",name);
+                //sende anfrage nach der userliste
+                QDataStream out(socket);
+                //QString regi(" + reg->getUsername() + ":" + reg->getPassword() + "\n");
+                //int sizeOfText = regi.size();
+
+                out << (int) 5;
+                out << (int) 1;
+                out << this->email;
+                out << "\n";
             }
             else if(stateID == 2)
             {
@@ -362,6 +380,8 @@ void MainWindow::readyRead()
                 // setup server and socket for file transfer
                 fileSender = new FileTransferSender(this);
                 fileSender->listen(QHostAddress::Any,4242);
+                fileSender->setFilePath(this->filePath);
+
 
                 qDebug() << "Is sender listening? " << fileSender->isListening();
 
@@ -985,6 +1005,7 @@ void MainWindow::on_actionSend_Data_triggered()
         // so first we need the choosed user if online or not
         QString toUser = filesend->listWidget->item(filesend->listWidget->currentRow())->text();//user@host
         QString fileName = filesend->datei->text();
+        this->filePath = fileName;
         QDataStream out(socket);
 
         out << (int) 6;

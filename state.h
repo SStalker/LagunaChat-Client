@@ -11,11 +11,11 @@ public:
     State();
     void stateLogin(QObject *parent);
 
-    void setDataStream(QDataStream in);
+    void setDataStream(QDataStream *in);
     void setSocket(QTcpSocket *s);
     
 private:
-    QDataStream mainIn;
+    QDataStream *mainIn;
     QTcpSocket *sock;
 };
 

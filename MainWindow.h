@@ -12,7 +12,7 @@
 #include "filetransferreceiver.h"
 
 #include "error.h"
-#include "state.h"
+//#include "state.h"
 
 /*
  * This is the MainWindow class that we have told to inherit from
@@ -37,7 +37,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
         QListWidgetItem* getUserInList(QString user);
 
         Error *error;
-        State *state;
+        //State *state;
 
     private slots:
 
@@ -108,4 +108,6 @@ signals:
         QString email;
 
         QString toMD5(QString text);
+
+        QString filePath;
 };
