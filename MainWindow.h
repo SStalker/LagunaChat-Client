@@ -39,6 +39,25 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
         Error *error;
         //State *state;
 
+        void changePageChat();
+        void gotTextMessage();
+        void newUserQuestion();
+        void newUserUpdate();
+
+        void hasUserAcceptFile();
+        void setupAcceptFileDialog();
+
+        void setupFileSender();
+        void setupFileReceiver();
+
+        void setupUserlistAfterLogin();
+        void gotOfflineTextMessage();
+
+        void friendIsOnline();
+        void friendIsOffline();
+
+
+
     private slots:
 
         // This function gets called when a user clicks on the
@@ -60,9 +79,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
         //This function get called when a user rightclick on one of the users from the userlist
         void wasDoubleClicked(QListWidgetItem *user);
-
-        //Data send to user
-        void data_send();
 
         //Count the typping chars
         void setCountValue(QString);
