@@ -2,6 +2,8 @@
 
 #include <QDebug>
 #include <QHostAddress>
+#include <QFile>
+#include <QDataStream>
 
 FileTransferReceiver::FileTransferReceiver(QObject *parent) :
     QTcpSocket(parent)
@@ -20,12 +22,32 @@ void FileTransferReceiver::readyRead()
     qint64 bytes = this->bytesAvailable();
     qDebug() << "Anzahl: " << bytes;
 
-    QByteArray data;
-    qint64 readBytes = read(data.data(),1000);
+    QByteArray data = readAll();
+    //char *daten[bytes];
+    //qint64 readBytes = read(*daten,1000);
 
-    qDebug() << "Bytes gelesen: " << readBytes << ": " << data.data();
+
+    //daten[bytes] = "\0";
+    //qDebug() << "Bytes gelesen: ";
+    int fileSize;
+    QDataStream in(this);
+
+    in >> fileSize;
+    qDebug() << "Filesize: " << fileSize;
+
+    while(data.size() < fileSize)
+    {
+        fileSize += read(data.data(),bytesAvailable());
+    }
 
 
+    QFile out("test.txt");
+    out.open(QIODevice::WriteOnly);
+    out.write(data);
+
+    qDebug() << out.fileName() << "was written";
+
+    out.close();
 }
 
 void FileTransferReceiver::connected()
