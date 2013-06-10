@@ -4,6 +4,8 @@
 #include <QHostAddress>
 #include <QFile>
 #include <QDataStream>
+#include <QTextStream>
+#include <QMessageBox>
 
 FileTransferReceiver::FileTransferReceiver(QObject *parent) :
     QTcpSocket(parent)
@@ -22,7 +24,7 @@ void FileTransferReceiver::readyRead()
     qint64 bytes = this->bytesAvailable();
     qDebug() << "Anzahl: " << bytes;
 
-    QByteArray data = readAll();
+    /*QByteArray data = readAll();
     //char *daten[bytes];
     //qint64 readBytes = read(*daten,1000);
 
@@ -30,24 +32,50 @@ void FileTransferReceiver::readyRead()
     //daten[bytes] = "\0";
     //qDebug() << "Bytes gelesen: ";
     //int fileSize;
-    /*QDataStream in(data);
 
-    in >> fileSize;
-    qDebug() << "Filesize: " << fileSize;
-
-    while(data.size() <= fileSize)
-    {
-        fileSize += read(data.data(),bytesAvailable());
-    }*/
-
-
-    QFile out(this->fileName);
+    qDebug() << data.toHex() << endl;
+    qDebug() << data.toLower() << endl;
+    qDebug() << data.toInt() << endl;
+    QFile out("downloads/" + this->fileName);
     out.open(QIODevice::WriteOnly | QIODevice::Append);
-    out.write(data);
+
+    //out.write(data.toLower());
+    QTextStream hi(&out);
+
+    hi.setCodec("ISO 8859-1");
+    hi << data;
 
     qDebug() << out.fileName() << "was written";
 
-    out.close();
+    out.close();*/
+int blockSize = 0;
+    QDataStream in(this);
+    in.setVersion(QDataStream::Qt_4_0);
+    if (blockSize == 0)
+    {
+        if (bytesAvailable() < sizeof(quint32))
+        return ;
+
+
+        in >> blockSize;
+    }
+
+    if (bytesAvailable() < blockSize)
+    return ;
+
+    QByteArray line;
+    line= readAll();
+    QFile file("downloads/" + this->fileName);
+    if(!(file.open(QIODevice::Append)))
+    //QMessageBox::information(this, tr("File"),tr("File cannot be opened."));
+    file.write(line);
+
+
+    blockSize=0;
+
+
+    file.close();
+
 }
 
 void FileTransferReceiver::connected()

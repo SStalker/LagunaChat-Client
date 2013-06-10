@@ -778,11 +778,12 @@ void MainWindow::setupAcceptFileDialog()
     in >> fromUser;
     in >> filename;
 
+    this->fileName = filename;
 
     newDataAuthDialog *newFile = new newDataAuthDialog(this);
     newFile->setEmailText(fromEmail);
     newFile->setUsernametext(fromUser);
-    newFile->setFileText(this->fileName);
+    newFile->setFileText(fileName);
 
     newFile->show();
     newFile->exec();
