@@ -30,12 +30,12 @@ void FileTransferReceiver::readyRead()
     //daten[bytes] = "\0";
     //qDebug() << "Bytes gelesen: ";
     int fileSize;
-    QDataStream in(this);
+    QDataStream in(data);
 
     in >> fileSize;
     qDebug() << "Filesize: " << fileSize;
 
-    while(data.size() < fileSize)
+    while(data.size() <= fileSize)
     {
         fileSize += read(data.data(),bytesAvailable());
     }

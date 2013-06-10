@@ -32,12 +32,13 @@ void FileTransferSender::startSending()
 
     qDebug() << "FileSender: File was read: Size: " << f.size() << "Bytes";
 
-    QDataStream out(senderSocket);
+    QDataStream out(data);
 
+    out.device()->seek(0);
     out << (int) data.size();
-    out << data;
 
-    //senderSocket->write(data);
+
+    senderSocket->write(data);
 }
 
 void FileTransferSender::disconnected()
