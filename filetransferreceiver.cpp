@@ -17,6 +17,15 @@ FileTransferReceiver::FileTransferReceiver(QObject *parent) :
 void FileTransferReceiver::readyRead()
 {
     qDebug() << "There a bytes to read yay";
+    qint64 bytes = this->bytesAvailable();
+    qDebug() << "Anzahl: " << bytes;
+
+    QByteArray data;
+    qint64 readBytes = read(data.data(),1000);
+
+    qDebug() << "Bytes gelesen: " << readBytes << ": " << data.data();
+
+
 }
 
 void FileTransferReceiver::connected()
@@ -28,6 +37,7 @@ void FileTransferReceiver::connected()
 void FileTransferReceiver::disconnect()
 {
     qDebug() << "The sender has closed the connection";
+    this->close();
 }
 qint64 FileTransferReceiver::readData(char *data, qint64 maxlen)
 {

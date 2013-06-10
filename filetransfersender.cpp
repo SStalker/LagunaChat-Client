@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QByteArray>
 
 FileTransferSender::FileTransferSender(QObject *parent) : QTcpServer(parent)
 {
@@ -26,15 +27,16 @@ void FileTransferSender::incomingConnection(qintptr socketfd)
 void FileTransferSender::startSending()
 {
     QFile f(this->filePath);
-    f.readAll();
+    QByteArray data = f.readAll();
 
     qDebug() << "FileSender: File was read: Size: " << f.size() << "Bytes";
-   // senderSocket->write()
+    senderSocket->write(data.data(),1000);
 }
 
 void FileTransferSender::disconnected()
 {
     qDebug() << "The client has closed the connection";
+    this->close();
 }
 
 void FileTransferSender::readyRead()
