@@ -29,8 +29,8 @@ void FileTransferReceiver::readyRead()
 
     //daten[bytes] = "\0";
     //qDebug() << "Bytes gelesen: ";
-    int fileSize;
-    QDataStream in(data);
+    //int fileSize;
+    /*QDataStream in(data);
 
     in >> fileSize;
     qDebug() << "Filesize: " << fileSize;
@@ -38,11 +38,11 @@ void FileTransferReceiver::readyRead()
     while(data.size() <= fileSize)
     {
         fileSize += read(data.data(),bytesAvailable());
-    }
+    }*/
 
 
-    QFile out("test.txt");
-    out.open(QIODevice::WriteOnly);
+    QFile out(this->fileName);
+    out.open(QIODevice::WriteOnly | QIODevice::Append);
     out.write(data);
 
     qDebug() << out.fileName() << "was written";
@@ -79,4 +79,9 @@ void FileTransferReceiver::hostFound()
 void FileTransferReceiver::error(QAbstractSocket::SocketError error)
 {
 
+}
+
+void FileTransferReceiver::setFileName(QString filename)
+{
+    this->fileName = filename;
 }

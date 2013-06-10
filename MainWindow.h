@@ -126,4 +126,5 @@ signals:
         QString toMD5(QString text);
 
         QString filePath;
+        QString fileName;
 };

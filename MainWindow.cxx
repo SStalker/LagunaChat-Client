@@ -29,6 +29,7 @@
 
 #include <QMultiMap>
 
+#include <QFileInfo>
 
 
 // This is our MainWindow constructor (you C++ n00b)
@@ -574,6 +575,11 @@ void MainWindow::on_actionSend_Data_triggered()
         // so first we need the choosed user if online or not
         QString toUser = filesend->listWidget->item(filesend->listWidget->currentRow())->text();//user@host
         QString fileName = filesend->datei->text();
+
+        QFileInfo info(fileName);
+
+        this->fileName = info.fileName();
+        qDebug() << "Original: " << fileName << "Aka: " << info.fileName();
         this->filePath = fileName;
         QDataStream out(socket);
 
@@ -772,10 +778,11 @@ void MainWindow::setupAcceptFileDialog()
     in >> fromUser;
     in >> filename;
 
+
     newDataAuthDialog *newFile = new newDataAuthDialog(this);
     newFile->setEmailText(fromEmail);
     newFile->setUsernametext(fromUser);
-    newFile->setFileText(filename);
+    newFile->setFileText(this->fileName);
 
     newFile->show();
     newFile->exec();
@@ -832,6 +839,7 @@ void MainWindow::setupFileReceiver()
 
     fileReceiver = new FileTransferReceiver(this);
     fileReceiver->connectToHost(QHostAddress(senderIP),4242);
+    fileReceiver->setFileName(this->fileName);
 }
 
 
