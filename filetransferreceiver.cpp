@@ -53,21 +53,23 @@ int blockSize = 0;
     in.setVersion(QDataStream::Qt_4_0);
     if (blockSize == 0)
     {
-        if (bytesAvailable() < sizeof(quint32))
+        if (bytes < sizeof(qint32))
         return ;
 
 
         in >> blockSize;
     }
 
-    if (bytesAvailable() < blockSize)
+    if (bytes < blockSize)
     return ;
 
     QByteArray line;
     line= readAll();
     QFile file("downloads/" + this->fileName);
-    if(!(file.open(QIODevice::Append)))
-    //QMessageBox::information(this, tr("File"),tr("File cannot be opened."));
+
+    file.open(QIODevice::WriteOnly | QIODevice::Append);
+    //qDebug() << tr("File cannot be opened.");
+
     file.write(line);
 
 
