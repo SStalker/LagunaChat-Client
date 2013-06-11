@@ -586,7 +586,7 @@ void MainWindow::on_actionSend_Data_triggered()
         out << (int) 6;
         out << toUser;
         out << this->email;
-        out << this->fileName;
+        out << fileName;
         out << "\n";
     }
 
@@ -779,11 +779,10 @@ void MainWindow::setupAcceptFileDialog()
     in >> filename;
 
     this->fileName = filename;
-
     newDataAuthDialog *newFile = new newDataAuthDialog(this);
     newFile->setEmailText(fromEmail);
     newFile->setUsernametext(fromUser);
-    newFile->setFileText(fileName);
+    newFile->setFileText(this->fileName);
 
     newFile->show();
     newFile->exec();

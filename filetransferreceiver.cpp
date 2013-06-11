@@ -22,7 +22,6 @@ void FileTransferReceiver::readyRead()
     qDebug() << "Anzahl: " << bytes;
 
     data += readAll();
-    /// jojojo
 }
 
 void FileTransferReceiver::connected()

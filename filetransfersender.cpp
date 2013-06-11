@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QFile>
 #include <QByteArray>
-#include <QDataStream>
 
 FileTransferSender::FileTransferSender(QObject *parent) : QTcpServer(parent)
 {
@@ -27,43 +26,11 @@ void FileTransferSender::incomingConnection(qintptr socketfd)
 
 void FileTransferSender::startSending()
 {
-    /*QFile f(this->filePath);
+    QFile f(this->filePath);
     QByteArray data = f.readAll();
 
     qDebug() << "FileSender: File was read: Size: " << f.size() << "Bytes";
-    qint64 sendBytes;
-    qint64 bytes = data.size();
-
-    sendBytes = senderSocket->write(data.data(),1000);
-
-    qDebug() << sendBytes << " were send";*/
-
-
-    QFile inputFile(this->filePath);
-    inputFile.open(QIODevice::ReadOnly);
-
-    QByteArray block;
-    QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_4_0);
-    out << (quint32)0;
-    QByteArray qwerty=inputFile.readAll();
-
-
-    block.append(qwerty);
-
-    inputFile.close();
-    out.device()->seek(0);
-    out << (quint32)(block.size() - sizeof(quint32));
-
-    qint64 x=0;
-    while(x<block.size())
-    {
-        qint64 y=senderSocket->write(block);
-        x=x+y;
-        qDebug()<<x;
-    }
-
-    senderSocket->disconnectFromHost();
+    senderSocket->write(data.data(),1000);
 }
 
 void FileTransferSender::disconnected()
