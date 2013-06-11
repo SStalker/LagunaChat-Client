@@ -7,11 +7,7 @@ Dialog::Dialog(QWidget *parent) :
 {
     setupUi(this);
     connect(Button1,SIGNAL(clicked()),this,SLOT(openDialog()));
-
-
 }
-
-
 
 void Dialog::openDialog()
 {
@@ -24,25 +20,7 @@ void Dialog::openDialog()
     file.open(QIODevice::ReadOnly);
     //QDataStream in(&file);//binaryfile += file.readLine();
     //in >> binaryfile;
-    binaryfile = file.readAll();
+    //binaryfile = file.readAll();
+    qDebug() << "Size of file: " << file.size() << " bytes";
     file.close();
-
-    qDebug() << binaryfile.size();
-
-
-    /*if(openFileDialog.exec())
-    {
-        QString filePath = openFileDialog.getOpenFileName(this,"Choose File","/home");
-
-        datei->setText(filePath);
-
-        QFile file(filePath);
-        qDebug() <<file.fileName();
-        file.open(QIODevice::ReadOnly);
-        QDataStream in(&file);//binaryfile += file.readLine();
-        in >> binaryfile;
-        file.close();
-
-        qDebug() << binaryfile.size();
-    }*/
 }
