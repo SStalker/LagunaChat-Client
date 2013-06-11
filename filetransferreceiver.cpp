@@ -2,10 +2,7 @@
 
 #include <QDebug>
 #include <QHostAddress>
-#include <QFile>
 #include <QDataStream>
-#include <QTextStream>
-#include <QMessageBox>
 
 FileTransferReceiver::FileTransferReceiver(QObject *parent) :
     QTcpSocket(parent)
@@ -24,61 +21,8 @@ void FileTransferReceiver::readyRead()
     qint64 bytes = this->bytesAvailable();
     qDebug() << "Anzahl: " << bytes;
 
-    /*QByteArray data = readAll();
-    //char *daten[bytes];
-    //qint64 readBytes = read(*daten,1000);
-
-
-    //daten[bytes] = "\0";
-    //qDebug() << "Bytes gelesen: ";
-    //int fileSize;
-
-    qDebug() << data.toHex() << endl;
-    qDebug() << data.toLower() << endl;
-    qDebug() << data.toInt() << endl;
-    QFile out("downloads/" + this->fileName);
-    out.open(QIODevice::WriteOnly | QIODevice::Append);
-
-    //out.write(data.toLower());
-    QTextStream hi(&out);
-
-    hi.setCodec("ISO 8859-1");
-    hi << data;
-
-    qDebug() << out.fileName() << "was written";
-
-    out.close();*/
-    quint32 blockSize = 0;
-
-    QDataStream in(this);
-    in.setVersion(QDataStream::Qt_4_0);
-    if (blockSize == 0)
-    {
-        if (bytes < (quint64)sizeof(quint32))
-        return ;
-
-
-        in >> blockSize;
-    }
-
-    if (bytes < blockSize)
-    return ;
-
-    QByteArray line;
-    line= readAll();
-    QFile file("downloads/" + this->fileName);
-
-    file.open(QIODevice::WriteOnly | QIODevice::Append);
-    //qDebug() << tr("File cannot be opened.");
-
-    file.write(line);
-
-
-    blockSize=0;
-
-
-    file.close();
-
+    data += readAll();
+    /// jojojo
 }
 
 void FileTransferReceiver::connected()
@@ -90,6 +34,14 @@ void FileTransferReceiver::connected()
 void FileTransferReceiver::disconnect()
 {
     qDebug() << "The sender has closed the connection";
+    data.remove(0,4);
+
+    QFile output("downloads/" + this->fileName);
+    output.open(QIODevice::WriteOnly | QIODevice::Append);
+    output.write(data);
+
+    qDebug() << output.fileName() << "was written";
+    output.close();
     this->close();
 }
 qint64 FileTransferReceiver::readData(char *data, qint64 maxlen)
