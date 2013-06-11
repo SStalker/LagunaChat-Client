@@ -81,8 +81,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     QSettings s;
     LineEditEmail->setText(s.value("UserEmail").toString());
-    //socket->connectToHost(s.value("ServerAddress").toString(),s.value("ServerPort").toInt());
-    //socket->connectToHost("localhost", 4201);
 
     cw = new ChatWidget();
 
