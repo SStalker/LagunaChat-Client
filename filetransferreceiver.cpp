@@ -48,12 +48,13 @@ void FileTransferReceiver::readyRead()
     qDebug() << out.fileName() << "was written";
 
     out.close();*/
-int blockSize = 0;
+    quint32 blockSize = 0;
+
     QDataStream in(this);
     in.setVersion(QDataStream::Qt_4_0);
     if (blockSize == 0)
     {
-        if (bytes < sizeof(qint32))
+        if (bytes < (quint64)sizeof(quint32))
         return ;
 
 
