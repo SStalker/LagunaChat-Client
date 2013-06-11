@@ -584,7 +584,7 @@ void MainWindow::on_actionSend_Data_triggered()
         out << (int) 6;
         out << toUser;
         out << this->email;
-        out << fileName;
+        out << this->fileName;
         out << "\n";
     }
 
