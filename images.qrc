@@ -35,5 +35,6 @@
         <file>internet-chat-3.png</file>
         <file>internet-group-chat.png</file>
         <file>pony.wav</file>
+        <file>menubar_program.png</file>
     </qresource>
 </RCC>
