@@ -567,12 +567,46 @@ void MainWindow::on_actionSend_Data_triggered()
         filesend->listWidget->addItem(itemData);
     }
 
+    qDebug() << filesend->listWidget->currentItem();
     filesend->show();
+
+    if(filesend->listWidget->count() == 0)
+    {
+        filesend->close();
+        QMessageBox msgBox;
+        msgBox.setText("Du hast leider keine Freunde mit denen du Dateien tauschen könntest oder vergessen einen Freund auszuwählen");
+        msgBox.setWindowTitle("Infomation");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
+    }
     if(filesend->exec())
     {
-        // so first we need the choosed user if online or not
+        // FIRST OF ALL CHECK: selected user nad filename
+
+        if(filesend->listWidget->currentItem() == NULL)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Du hast leider keinen Freund ausgewählt");
+            msgBox.setWindowTitle("Infomation");
+            msgBox.setIcon(QMessageBox::Information);
+            msgBox.exec();
+            return;
+        }
+
+        // IF a user was selected then we can go on and get the path of file and email of user
+
         QString toUser = filesend->listWidget->item(filesend->listWidget->currentRow())->text();//user@host
         QString fileName = filesend->datei->text();
+
+        if(fileName == "")
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Du hast leider keine Datei ausgewählt");
+            msgBox.setWindowTitle("Infomation");
+            msgBox.setIcon(QMessageBox::Information);
+            msgBox.exec();
+            return;
+        }
 
         QFileInfo info(fileName);
 

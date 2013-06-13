@@ -45,12 +45,12 @@ void FileTransferReceiver::disconnect()
 }
 /*qint64 FileTransferReceiver::readData(char *data, qint64 maxlen)
 {
-    return 0;
+return 0;
 }
 
 qint64 FileTransferReceiver::writeData(const char *data, qint64 len)
 {
-    return 0;
+return 0;
 }*/
 
 void FileTransferReceiver::hostFound()

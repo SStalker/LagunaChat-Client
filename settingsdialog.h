@@ -22,6 +22,7 @@ private:
 
     QString serverAddress;
 private slots:
+    void choosePathForDownloads();
 
 };
 
