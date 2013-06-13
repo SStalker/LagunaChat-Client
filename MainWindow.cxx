@@ -79,8 +79,24 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect(userListWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(wasDoubleClicked(QListWidgetItem*)));
 
+
     QSettings s;
     LineEditEmail->setText(s.value("UserEmail").toString());
+    if(s.value("FileTransferPath").toString() == "")
+    {
+        qDebug() << QDir::homePath();
+        QFileInfo path (QDir::homePath() + "/LagunaChat/downloads");
+        if(path.exists())
+        {
+            s.setValue("FileTransferPath",QDir::homePath() + "/LagunaChat/downloads");
+        }
+        else
+        {
+            QDir().mkdir(QDir::homePath() + "/LagunaChat/downloads");
+            s.setValue("FileTransferPath",QDir::homePath() + "/LagunaChat/downloads");
+        }
+
+    }
 
     cw = new ChatWidget();
 

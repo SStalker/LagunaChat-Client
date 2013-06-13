@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QHostAddress>
 #include <QDataStream>
+#include <QSettings>
 
 FileTransferReceiver::FileTransferReceiver(QObject *parent) :
     QTcpSocket(parent)
@@ -35,7 +36,8 @@ void FileTransferReceiver::disconnect()
     qDebug() << "The sender has closed the connection";
     data.remove(0,4);
 
-    QFile output("downloads/" + this->fileName);
+    QSettings s;
+    QFile output(s.value("FileTransferPath").toString() + this->fileName);
     output.open(QIODevice::WriteOnly | QIODevice::Append);
     output.write(data);
 

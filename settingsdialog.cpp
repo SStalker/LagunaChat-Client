@@ -15,6 +15,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->lineEditServerAddress->setText(s.value("ServerAddress").toString());
     ui->comboBoxServerPort->setCurrentText(s.value("ServerPort").toString());
+    ui->lineEditFileTransferPath->setText(s.value("FileTransferPath").toString());
 
     // SET THE CONNECTS
     connect(ui->pushButton_FileTransfer_Path,SIGNAL(clicked()),this,SLOT(choosePathForDownloads()));
