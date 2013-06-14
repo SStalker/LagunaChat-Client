@@ -936,11 +936,12 @@ void MainWindow::gotOfflineTextMessage()
     int count_messages = (list.size()/4);
     qDebug() << "Anzahl ungelesener Nachrichten: " << count_messages;
 
-    for(int i = 1; i <= count_messages; i++ )
-    {
-        QList<QString> messageItem = list.values(i);
-        for (int j = 0; j < count_messages; ++j)
+    //for(int i = 1; i <= count_messages; i++ )
+    //{
+
+        for (int j = 0; j < count_messages; j++)
         {
+            QList<QString> messageItem = list.values(j+1);
             qDebug() << "Date: " << messageItem.at(0) << " Message: " << messageItem.at(1) << " FromEmail: " << messageItem.at(2) << "FromName: " << messageItem.at(3);
             QString message = messageItem.at(0);
             message.append("@");
@@ -985,7 +986,7 @@ void MainWindow::gotOfflineTextMessage()
                 chat->writeInTextfield(message);
                 cw->raise();
             }
-        }
+       // }
     }
 }
 
