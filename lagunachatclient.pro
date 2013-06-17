@@ -11,11 +11,11 @@
 
 # The "app" template means we want to build an application rather
 # than a library or other kind of project
-TEMPLATE = app
+#TEMPLATE = app
 
 # Some variables that help the compiler do its thing:
-DEPENDPATH += .
-INCLUDEPATH += .
+#DEPENDPATH += .
+#INCLUDEPATH += .
 
 # This gives us access to the Qt socket classes (QTcpSocket)
 # QT += network widgets multimedia
@@ -74,3 +74,19 @@ SOURCES += MainWindow.cxx \
     request.cpp \
     error.cpp
 
+Release:DESTDIR = ./
+
+unix:MOC_DIR = ./moc
+win32:MOC_DIR = ./moc
+
+unix:OBJECTS_DIR = ./obj
+win32:OBJECTS_DIR = ./obj
+
+unix:RCC_DIR = ./rcc
+win32:RCC_DIR = ./rcc
+
+unix:UI_DIR = ./ui
+win32:UI_DIR = ./ui
+
+#unix:LIBS += -L./lib -lmath
+#win32:LIBS += ./dll/math.lib
