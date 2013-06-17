@@ -936,57 +936,46 @@ void MainWindow::gotOfflineTextMessage()
     int count_messages = (list.size()/4);
     qDebug() << "Anzahl ungelesener Nachrichten: " << count_messages;
 
-    //for(int i = 1; i <= count_messages; i++ )
-    //{
+    for (int j = 0; j < count_messages; j++)
+    {
+        QList<QString> messageItem = list.values(j+1);
+        qDebug() << "Date: " << messageItem.at(0) << " Message: " << messageItem.at(1) << " FromEmail: " << messageItem.at(2) << "FromName: " << messageItem.at(3);
+        QString message = messageItem.at(0);
+        message.append("@");
+        message.append(messageItem.at(3));
+        message.append(": ");
+        message.append(messageItem.at(1));
 
-        for (int j = 0; j < count_messages; j++)
+        // look if the user has an open tab in the chatwidget
+        bool exist = false;
+        for(int i = 0; i < cw->count(); i++)
         {
-            QList<QString> messageItem = list.values(j+1);
-            qDebug() << "Date: " << messageItem.at(0) << " Message: " << messageItem.at(1) << " FromEmail: " << messageItem.at(2) << "FromName: " << messageItem.at(3);
-            QString message = messageItem.at(0);
-            message.append("@");
-            message.append(messageItem.at(3));
-            message.append(": ");
-            message.append(messageItem.at(1));
+            if(messageItem.at(2) == cw->tabText(i))
+            {
+                // uhh the tab exist and we can write the text into the widget
 
-            /*cw->addTab(new newTab(0,socket),messageItem.at(2));
+                // first we need access to the textfield in the specified tab
+                newTab *chat = (newTab*)cw->widget(i);
+                chat->writeInTextfield(message);
+
+                cw->raise();
+                exist = true;
+                // so the message is okay return here
+                break;
+            }
+        }
+
+        // if we come to here then there is no tab for the user
+        // we create on
+        if(!exist)
+        {
+            cw->addTab(new newTab(0,socket),messageItem.at(2));
             qDebug() << "Tabs: " << cw->count();
             newTab *chat = (newTab*)cw->widget(cw->count()-1);
             cw->show();
             chat->writeInTextfield(message);
-            cw->raise();*/
-
-            // look if the user has an open tab in the chatwidget
-            bool exist = false;
-            for(int i = 0; i < cw->count(); i++)
-            {
-                if(messageItem.at(2) == cw->tabText(i))
-                {
-                    // uhh the tab exist and we can write the text into the widget
-
-                    // first we need access to the textfield in the specified tab
-                    newTab *chat = (newTab*)cw->widget(i);
-                    chat->writeInTextfield(message);
-
-                    cw->raise();
-                    exist = true;
-                    // so the message is okay return here
-                    break;
-                }
-            }
-
-            // if we come to here then there is no tab for the user
-            // we create on
-            if(!exist)
-            {
-                cw->addTab(new newTab(0,socket),messageItem.at(2));
-                qDebug() << "Tabs: " << cw->count();
-                newTab *chat = (newTab*)cw->widget(cw->count()-1);
-                cw->show();
-                chat->writeInTextfield(message);
-                cw->raise();
-            }
-       // }
+            cw->raise();
+        }
     }
 }
 
