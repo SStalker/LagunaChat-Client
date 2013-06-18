@@ -88,5 +88,7 @@ win32:RCC_DIR = ./rcc
 unix:UI_DIR = ./ui
 win32:UI_DIR = ./ui
 
+win32:RC_FILE = LagunaChat.rc
+
 #unix:LIBS += -L./lib -lmath
 #win32:LIBS += ./dll/math.lib

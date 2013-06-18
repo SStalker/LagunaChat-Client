@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 
     app.setOrganizationName("BluePanel");
     app.setOrganizationDomain("BluePanel.org");
-    app.setApplicationName("Laguna Chat");
+    app.setApplicationName("LagunaChat");
 
     app.setWindowIcon(QIcon(":/internet-chat-2.png"));
 
