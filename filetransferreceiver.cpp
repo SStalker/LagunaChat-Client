@@ -43,6 +43,7 @@ void FileTransferReceiver::disconnect()
 
     qDebug() << output.fileName() << "was written";
     output.close();
+    data.clear();
     this->close();
 }
 /*qint64 FileTransferReceiver::readData(char *data, qint64 maxlen)
