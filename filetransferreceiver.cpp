@@ -4,6 +4,7 @@
 #include <QHostAddress>
 #include <QDataStream>
 #include <QSettings>
+#include <QDir>
 
 FileTransferReceiver::FileTransferReceiver(QObject *parent) :
     QTcpSocket(parent)
@@ -37,11 +38,22 @@ void FileTransferReceiver::disconnect()
     data.remove(0,4);
 
     QSettings s;
-    QFile output(s.value("FileTransferPath").toString() + this->fileName);
+
+    QDir dir(s.value("FileTransferPath").toString());
+
+    if(!dir.exists())
+    {
+        qDebug() << "Path does not exist: " << dir.path();
+        dir.mkpath(dir.path());
+    }
+
+    QFile output( dir.path() + dir.separator() + this->fileName);
+
+
     output.open(QIODevice::WriteOnly | QIODevice::Append);
     output.write(data);
 
-    qDebug() << output.fileName() << "was written";
+    qDebug() << dir.path() << output.fileName() << "was written";
     output.close();
     data.clear();
     this->close();
