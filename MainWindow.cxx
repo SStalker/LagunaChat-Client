@@ -599,7 +599,7 @@ void MainWindow::on_actionSend_Data_triggered()
     {
         // FIRST OF ALL CHECK: selected user nad filename
 
-        if(filesend->listWidget->currentItem() == NULL)
+        if(filesend->listWidget->selectedItems().count() == 0)
         {
             QMessageBox msgBox;
             msgBox.setText("Du hast leider keinen Freund ausgewählt");
@@ -1011,4 +1011,14 @@ void MainWindow::friendIsOffline()
 
     getUserInList(_friend)->setIcon(QPixmap(":/user_offline.png"));
     statusBarMain->showMessage(_friend + " hat sich ausgeloggt");
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QString text;
+    text.append("LagunaChat 0.3.0 \n\n");
+    text.append("Basierend auf Qt 5.0.2 (64 bit)\n\n");
+    text.append("Erstellt am Juni 20 2013 um 23:00:21");
+
+    QMessageBox::about(this,"About",text);
 }
