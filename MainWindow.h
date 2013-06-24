@@ -4,6 +4,7 @@
 #include <QHostAddress>
 #include <QSettings>
 
+
 // This is the include file that Qt generates for us from the
 // GUI we built in Designer  
 #include "ui_MainWindow.h"
@@ -12,7 +13,8 @@
 #include "filetransferreceiver.h"
 
 #include "error.h"
-//#include "state.h"
+
+#include "debug.h"
 
 /*
  * This is the MainWindow class that we have told to inherit from
@@ -37,7 +39,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
         QListWidgetItem* getUserInList(QString user);
 
         Error *error;
-        //State *state;
+
+        Debug *debug;
 
         void changePageChat();
         void gotTextMessage();

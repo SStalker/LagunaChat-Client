@@ -6,6 +6,8 @@
 #include <QSettings>
 #include <QDir>
 
+
+
 FileTransferReceiver::FileTransferReceiver(QObject *parent) :
     QTcpSocket(parent)
 {
@@ -30,11 +32,13 @@ void FileTransferReceiver::connected()
 {
     QHostAddress ip = this->peerAddress();
     qDebug() << "Sender(" << ip.toString() << ") can now send the file";
+    debug.debugging("Sender(" + ip.toString() + ") can now send the file");
 }
 
 void FileTransferReceiver::disconnect()
 {
     qDebug() << "The sender has closed the connection";
+    debug.debugging("The sender has closed the connection");
     data.remove(0,4);
 
     QSettings s;
@@ -44,6 +48,7 @@ void FileTransferReceiver::disconnect()
     if(!dir.exists())
     {
         qDebug() << "Path does not exist: " << dir.path();
+        debug.debugging("Path does not exist: " + dir.path());
         dir.mkpath(dir.path());
     }
 
@@ -53,7 +58,8 @@ void FileTransferReceiver::disconnect()
     output.open(QIODevice::WriteOnly | QIODevice::Append);
     output.write(data);
 
-    qDebug() << dir.path() << output.fileName() << "was written";
+    qDebug() << dir.path() << dir.separator() <<  this->fileName << " was written";
+    debug.debugging(dir.path() + dir.separator() + this->fileName + " was written");
     output.close();
     data.clear();
     this->close();
@@ -71,11 +77,13 @@ return 0;
 void FileTransferReceiver::hostFound()
 {
     qDebug() << "Just found an host (sender)";
+    debug.debugging("Just found an host (sender)");
 }
 
 void FileTransferReceiver::error(QAbstractSocket::SocketError error)
 {
     qDebug() << error;
+    debug.debugging(QString(error));
 }
 
 void FileTransferReceiver::setFileName(QString filename)

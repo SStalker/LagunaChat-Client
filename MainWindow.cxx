@@ -14,6 +14,7 @@
 // Own classes to minify my sourcecode and make it more readable
 #include "error.h"
 
+
 #include <QRegExp>
 #include <QMessageBox>
 #include <QMenu>
@@ -80,11 +81,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(userListWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(wasDoubleClicked(QListWidgetItem*)));
 
 
+    debug = new Debug();
+
     QSettings s;
     LineEditEmail->setText(s.value("UserEmail").toString());
     if(s.value("FileTransferPath").toString() == "")
     {
         qDebug() << QDir::homePath();
+        debug->debugging(QDir::homePath());
         QFileInfo path (QDir::homePath() + "/LagunaChat/downloads");
         if(path.exists())
         {
@@ -104,11 +108,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     out.setDevice(socket);
 
     error = new Error();
+
 }
 
 void MainWindow::on_loginButton_clicked()
 {
     qDebug() << "LoginBUtton wurde geklickt";
+    debug->debugging("LoginBUtton wurde geklickt");
     QDataStream out(socket);
 
     out << (int) 4;
@@ -118,6 +124,9 @@ void MainWindow::on_loginButton_clicked()
 
     qDebug() << "Bytes written: " << socket->bytesToWrite();
     qDebug() << "Status of Datastream" << out.status();
+
+    debug->debugging("Bytes written: " + socket->bytesToWrite());
+    debug->debugging("Status of Datastream" + out.status());
 
     email = LineEditEmail->text();
 
@@ -182,6 +191,7 @@ void MainWindow::readyRead()
 
         in >> messageID;
         qDebug() << "messageID: " << messageID;
+        debug->debugging("messageID: " + messageID);
 
         switch(messageID)
         {
@@ -190,6 +200,7 @@ void MainWindow::readyRead()
                         in >> errorID;
 
                         qDebug() << "Errornumber: " << errorID;
+                        debug->debugging("Errornumber: " + errorID);
 
                         switch(errorID)
                         {
@@ -203,6 +214,7 @@ void MainWindow::readyRead()
                         in >> stateID;
 
                         qDebug() << "Current status: " << stateID;
+                        debug->debugging("Current status: " + stateID);
 
                         switch(stateID)
                         {
@@ -251,6 +263,7 @@ void MainWindow::readyRead()
 
         in >> temp;
         qDebug() << "Endzeichen gelesen";        
+        debug->debugging("Endzeichen gelesen");
     }
 }
 
@@ -259,11 +272,14 @@ void MainWindow::readyRead()
 void MainWindow::connected()
 {
     qDebug() << "Verbindung zum Server hergestellt";
+    debug->debugging("Verbindung zum Server hergestellt");
     statusBarMain->showMessage("Verbindung zum Server hergestellt");
 
     ipv4 = socket->peerAddress();
     qDebug() << socket->errorString();
+    debug->debugging(socket->errorString());
     qDebug() << "Info: " << ipv4.toString() << " ||| ";
+    debug->debugging("Info: " + ipv4.toString() + " ||| ");
 
     actionLogin->setVisible(true);
     actionRegistration->setVisible(true);
@@ -290,6 +306,7 @@ void MainWindow::wasDoubleClicked(QListWidgetItem *user)
     if(!cw->isWindow())
     {
         qDebug() << "Erstelle Chatfenster";
+        debug->debugging("Erstelle Chatfenster");
 
         cw->show();
     }
@@ -324,6 +341,9 @@ void MainWindow::on_actionRegistration_triggered()
             qDebug() << "Sein Username: " << reg->getUsername();
             qDebug() << "Passwort1: " << reg->getPasswordFirst();
             qDebug() << "Passwort2: " << reg->getPasswordSecond();
+
+            debug->debugging("Ein neuer User wird registriert");
+
 
             QDataStream out(socket);
             //QString regi(" + reg->getUsername() + ":" + reg->getPassword() + "\n");
@@ -383,6 +403,8 @@ void MainWindow::on_actionRegistration_triggered()
     {
         qDebug() << "Registrierung erst in 30 Minuten wieder m�glich";
         qDebug() << "Bitte warten...";
+        debug->debugging("Registrierung erst in 30 Minuten wieder m�glich");
+        debug->debugging("Bitte warten...");
     }
 }
 
@@ -396,6 +418,7 @@ void MainWindow::changeRegistrationMode()
 
 void MainWindow::on_actionSettings_triggered()
 {
+    debug->debugging("Settings were triggered");
     SettingsDialog *setting = new SettingsDialog(this);
 
     setting->show();
@@ -413,6 +436,7 @@ QString MainWindow::toMD5(QString text)
 void MainWindow::socketError(QAbstractSocket::SocketError error)
 {
     qDebug() << "Socketerror: " << error;
+    debug->debugging("Socketerror: " + error);
     if(error == QAbstractSocket::RemoteHostClosedError)
     {
         actionLogin->setText("Login");
@@ -434,18 +458,21 @@ void MainWindow::on_actionConnect_triggered()
 {
     QSettings s;
     qDebug() << "Verbindung zu: " << s.value("ServerAddress").toString() << " Port: " << s.value("ServerPort").toInt();
+    debug->debugging("Verbindung zu: " + s.value("ServerAddress").toString() + " Port: " + s.value("ServerPort").toString());
     socket->connectToHost(s.value("ServerAddress").toString(),s.value("ServerPort").toInt());
 }
 
 void MainWindow::on_actionLogin_triggered()
 {
     qDebug() << "ActionLogin getriggerd";
+    debug->debugging("ActionLogin getriggerd");
     emit on_loginButton_clicked();
 }
 
 void MainWindow::logout_triggered()
 {
     qDebug() << "Logout";
+    debug->debugging("Logout");
     statusBarMain->showMessage("Logout");
     QDataStream out(socket);
 
@@ -534,6 +561,7 @@ void MainWindow::on_actionQuit_triggered()
     qDebug() << "Programm cloesd";
 
     qDebug() << "Logout";
+    debug->debugging("Program closed:::Logout");
     statusBarMain->showMessage("Logout");
     QDataStream out(socket);
 
@@ -542,13 +570,14 @@ void MainWindow::on_actionQuit_triggered()
     out << email;
     out << "\n";
     socket->close();
-
+    debug->close();
     this->close();
 }
 
 bool MainWindow::checkUserInList(QString user)
 {
     qDebug() << "***FUNKTION***-->checkUserInList";
+    debug->debugging("***FUNKTION***-->checkUserInList");
     for(int i=0; i < userListWidget->count(); i++){
 
         if(user == userListWidget->item(i)->text()){
@@ -562,6 +591,7 @@ bool MainWindow::checkUserInList(QString user)
 QListWidgetItem* MainWindow::getUserInList(QString user)
 {
     qDebug() << "***FUNKTION***-->getUserInlist";
+    debug->debugging("***FUNKTION***-->getUserInlist");
     for(int i=0; i < userListWidget->count(); i++){
 
         if(user == userListWidget->item(i)->text()){
@@ -575,6 +605,7 @@ QListWidgetItem* MainWindow::getUserInList(QString user)
 void MainWindow::on_actionSend_Data_triggered()
 {
     qDebug() << "***FUNKTION***-->on_actionSend_Data_triggered";
+    debug->debugging("***FUNKTION***-->on_actionSend_Data_triggered");
     Dialog *filesend = new Dialog();
 
     for(int i = 0; i < userListWidget->count(); i++)
@@ -584,6 +615,7 @@ void MainWindow::on_actionSend_Data_triggered()
     }
 
     qDebug() << filesend->listWidget->currentItem();
+    debug->debugging(filesend->listWidget->currentItem()->text());
     filesend->show();
 
     if(filesend->listWidget->count() == 0)
@@ -628,6 +660,7 @@ void MainWindow::on_actionSend_Data_triggered()
 
         this->fileName = info.fileName();
         qDebug() << "Original: " << fileName << "Aka: " << info.fileName();
+        debug->debugging("Original: " + fileName + "Aka: " + info.fileName());
         this->filePath = fileName;
         QDataStream out(socket);
 
@@ -645,6 +678,7 @@ void MainWindow::on_actionSend_Data_triggered()
 void MainWindow::changePageChat()
 {
     qDebug() << "***FUNKTION***-->changePageChat";
+    debug->debugging("***FUNKTION***-->changePageChat");
     // Flip over to the chat page:
     stackedWidget->setCurrentWidget(chatPage);
     actionLogin->setText("Logout");
@@ -669,6 +703,7 @@ void MainWindow::changePageChat()
 void MainWindow::gotTextMessage()
 {
     qDebug() << "***FUNKTION***-->gotTextMessage";
+    debug->debugging("***FUNKTION***-->gotTextMessage");
     QString fromMail;
     QString toMail;
     QString room;
@@ -683,6 +718,7 @@ void MainWindow::gotTextMessage()
              << "Room: " << room << endl
              << "Message: " << message;
 
+    debug->debugging("A message from " + fromMail + " to " + toMail + "Room: " + room + "Message: " + message);
 
     // look if the user has an open tab in the chatwidget
     bool exist = false;
@@ -709,6 +745,7 @@ void MainWindow::gotTextMessage()
     {
         cw->addTab(new newTab(0,socket),fromMail);
         qDebug() << "Tabs: " << cw->count();
+        debug->debugging("Tabs: " + cw->count());
         newTab *chat = (newTab*)cw->widget(cw->count()-1);
         cw->show();
         chat->writeInTextfield(message);
@@ -720,6 +757,7 @@ void MainWindow::gotTextMessage()
 void MainWindow::newUserQuestion()
 {
     qDebug() << "***FUNKTION***-->newUserQuestion";
+    debug->debugging("***FUNKTION***-->newUserQuestion");
     QMap<QString,QString> list;
     in >> list;
 
@@ -740,6 +778,7 @@ void MainWindow::newUserQuestion()
         {
             //send message to server that the user accepts the other user to his list
             qDebug() << "Client akzeptiert Freundesabfrage ab";
+            debug->debugging("Client akzeptiert Freundesabfrage ab");
             QDataStream out(socket);
             out << (int) 5;
             out << (int) 5;
@@ -752,6 +791,7 @@ void MainWindow::newUserQuestion()
         {
             //send message to server that the user dont accept the other user
             qDebug() << "Client lehnt Freundesabfrage ab";
+            debug->debugging("Client lehnt Freundesabfrage ab");
             QDataStream out(socket);
             out << (int) 5;
             out << (int) 5;
@@ -762,12 +802,14 @@ void MainWindow::newUserQuestion()
         }
     }
     qDebug() << "These Users wants to be a friend with you: " << list.size() << list.values();
+    debug->debugging("These Users wants to be a friend with you: ");
 }
 
 
 void MainWindow::newUserUpdate()
 {
     qDebug() << "***FUNKTION***-->newUserUpdate";
+    debug->debugging("***FUNKTION***-->newUserUpdate");
     // get a new user and update the userlist
     QString user;
     in >> user;
@@ -778,6 +820,7 @@ void MainWindow::newUserUpdate()
 void MainWindow::hasUserAcceptFile()
 {
     qDebug() << "***FUNKTION***-->hasUserAcceptFile";
+    debug->debugging("***FUNKTION***-->hasUserAcceptFile");
     int ok = 0;
     QString emailFromChoosedUser;
 
@@ -790,6 +833,7 @@ void MainWindow::hasUserAcceptFile()
         in >> ipFromUser;
 
         qDebug() << "User(" << ipFromUser << "==" << emailFromChoosedUser << ") accepted. So we can open the Connection";
+        debug->debugging("User(" + ipFromUser + "==" + emailFromChoosedUser + ") accepted. So we can open the Connection");
 
         // send an info that the server is now listening
 
@@ -804,6 +848,7 @@ void MainWindow::hasUserAcceptFile()
     else
     {
         qDebug() << "User dont wats your fucking file!! ";
+        debug->debugging("User dont wats your fucking file!! ");
         QMessageBox msgBox;
         msgBox.setText("User dont wats your fucking file!!");
         msgBox.setWindowTitle("Infomation");
@@ -816,6 +861,7 @@ void MainWindow::hasUserAcceptFile()
 void MainWindow::setupAcceptFileDialog()
 {
     qDebug() << "***FUNKTION***-->setupAcceptFileDialog";
+    debug->debugging("***FUNKTION***-->setupAcceptFileDialog");
     QString fromEmail;
     QString fromUserIp;
     QString fromUser;
@@ -840,6 +886,7 @@ void MainWindow::setupAcceptFileDialog()
         // send message to server that the user accepts the other user to his list
 
         qDebug() << "Client akzeptiert Datei von: " << fromUserIp;
+        debug->debugging("Client akzeptiert Datei von: " + fromUserIp);
         QDataStream out(socket);
         out << (int) 5;
         out << (int) 6;
@@ -853,6 +900,7 @@ void MainWindow::setupAcceptFileDialog()
         //send message to server that the user dont accept the other user
 
         qDebug() << "Client lehnt Datei ab";
+        debug->debugging("Client lehnt Datei ab");
         QDataStream out(socket);
         out << (int) 5;
         out << (int) 6;
@@ -867,6 +915,7 @@ void MainWindow::setupAcceptFileDialog()
 void MainWindow::setupFileSender()
 {
     qDebug() << "***FUNKTION***-->setupFileSender";
+    debug->debugging("***FUNKTION***-->setupFileSender");
     // setup server and socket for file transfer
 
     fileSender = new FileTransferSender(this);
@@ -874,12 +923,14 @@ void MainWindow::setupFileSender()
     fileSender->setFilePath(this->filePath);
 
     qDebug() << "Is sender listening? " << fileSender->isListening();
+    debug->debugging("Is sender listening? " + fileSender->isListening());
 }
 
 
 void MainWindow::setupFileReceiver()
 {
     qDebug() << "***FUNKTION***-->setupFileReceiver";
+    debug->debugging("***FUNKTION***-->setupFileReceiver");
     QString senderIP;
     in >> senderIP;
 
@@ -894,9 +945,11 @@ void MainWindow::setupFileReceiver()
 void MainWindow::setupUserlistAfterLogin()
 {
     qDebug() << "***FUNKTION***-->setupUserlistAfterLogin";
+    debug->debugging("***FUNKTION***-->setupUserlistAfterLogin");
     // get the Userlist after login
 
     qDebug() << "get the Userlist after login";
+    debug->debugging("get the Userlist after login");
     QMap<QString, bool> userlist;
         in >> userlist;
         QMapIterator<QString, bool> i(userlist);
@@ -917,6 +970,7 @@ void MainWindow::setupUserlistAfterLogin()
     }
 
     qDebug() << userlist.size() << "User are copied to the list";
+    debug->debugging(userlist.size() + "User are copied to the list");
 
     out << (int) 5;
     out << (int) 4;
@@ -928,6 +982,7 @@ void MainWindow::setupUserlistAfterLogin()
 void MainWindow::gotOfflineTextMessage()
 {
     qDebug() << "***FUNKTION***-->gotOfflineTextMessage";
+    debug->debugging("***FUNKTION***-->gotOfflineTextMessage");
     // ungelesene Nachrichten
 
     QMultiMap<int, QString> list;
@@ -935,16 +990,20 @@ void MainWindow::gotOfflineTextMessage()
 
     int count_messages = (list.size()/4);
     qDebug() << "Anzahl ungelesener Nachrichten: " << count_messages;
+    debug->debugging("Anzahl ungelesener Nachrichten: " + count_messages);
 
     for (int j = 0; j < count_messages; j++)
     {
         QList<QString> messageItem = list.values(j+1);
         qDebug() << "Date: " << messageItem.at(0) << " Message: " << messageItem.at(1) << " FromEmail: " << messageItem.at(2) << "FromName: " << messageItem.at(3);
+
         QString message = messageItem.at(0);
         message.append("@");
         message.append(messageItem.at(3));
         message.append(": ");
         message.append(messageItem.at(1));
+
+        debug->debugging(message);
 
         // look if the user has an open tab in the chatwidget
         bool exist = false;
@@ -971,6 +1030,7 @@ void MainWindow::gotOfflineTextMessage()
         {
             cw->addTab(new newTab(0,socket),messageItem.at(2));
             qDebug() << "Tabs: " << cw->count();
+            debug->debugging("Tabs: " + cw->count());
             newTab *chat = (newTab*)cw->widget(cw->count()-1);
             cw->show();
             chat->writeInTextfield(message);
@@ -983,9 +1043,11 @@ void MainWindow::gotOfflineTextMessage()
 void MainWindow::friendIsOnline()
 {
     qDebug() << "***FUNKTION***-->friendIsOnline";
+    debug->debugging("***FUNKTION***-->friendIsOnline");
     // friend is Online
 
     qDebug() << "friend is online";
+    debug->debugging("friend is online");
     QString _friend;
     in >> _friend;
 
@@ -1003,9 +1065,11 @@ void MainWindow::friendIsOnline()
 void MainWindow::friendIsOffline()
 {
     qDebug() << "***FUNKTION***-->friendIsOffline";
+    debug->debugging("***FUNKTION***-->friendIsOffline");
     // friend is offline
 
     qDebug() << "friend is offine";
+    debug->debugging("friend is offine");
     QString _friend;
     in >> _friend;
 

@@ -55,7 +55,8 @@ HEADERS += MainWindow.h \
     filetransfersender.h \
     filetransferreceiver.h \
     request.h \
-    error.h
+    error.h \
+    debug.h
 
 SOURCES += MainWindow.cxx \
            main.cpp \
@@ -72,7 +73,8 @@ SOURCES += MainWindow.cxx \
     filetransfersender.cpp \
     filetransferreceiver.cpp \
     request.cpp \
-    error.cpp
+    error.cpp \
+    debug.cpp
 
 Release:DESTDIR = ./
 
